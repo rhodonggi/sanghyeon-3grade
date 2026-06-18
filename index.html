@@ -182,7 +182,12 @@ async function fetchCounts(){
   try{
     var res = await fetch(SCRIPT_URL + '?action=getCounts', {method:'GET', mode:'cors'});
     var data = await res.json();
-    if(data.success) serverCounts = data.counts || {};
+    if(data.success){
+      // 키를 숫자로 변환해서 저장
+      var raw = data.counts || {};
+      serverCounts = {};
+      Object.keys(raw).forEach(function(k){ serverCounts[Number(k)] = raw[k]; });
+    }
   } catch(e){ /* 네트워크 오류 시 기존 값 유지 */ }
 }
 
